@@ -3,46 +3,39 @@ name: Build Kickoff Manager APK
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "web/**"
-      - "package.json"
-      - "capacitor.config.ts"
-      - ".github/workflows/build-android.yml"
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Ambil kode proyek
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Siapkan Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Setup Java
+      - name: Siapkan Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "21"
 
-      - name: Install dependencies
+      - name: Instal dependensi
         run: npm install
 
-      - name: Add Android platform
+      - name: Siapkan Android
         run: npx cap add android
 
-      - name: Sync Android
+      - name: Sinkronkan proyek
         run: npx cap sync android
 
-      - name: Build debug APK
+      - name: Buat APK
         run: cd android && chmod +x gradlew && ./gradlew assembleDebug
 
-      - name: Upload APK
+      - name: Simpan APK
         uses: actions/upload-artifact@v4
         with:
           name: kickoff-manager-debug-apk
           path: android/app/build/outputs/apk/debug/app-debug.apk
-          
